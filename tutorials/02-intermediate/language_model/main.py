@@ -111,7 +111,7 @@ with torch.no_grad():
             # File write
             word = corpus.dictionary.idx2word[word_id]
             word = '\n' if word == '<eos>' else word + ' '
-            f.write(word)
+            f.write(word) # 956 words + 44('/n')
 
             if (i+1) % 100 == 0:
                 print('Sampled [{}/{}] words and save to {}'.format(i+1, num_samples, 'sample.txt'))
