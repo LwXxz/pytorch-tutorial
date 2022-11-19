@@ -27,11 +27,11 @@ class Corpus(object):
         with open(path, 'r') as f:
             tokens = 0
             for line in f:
-                words = line.split() + ['<eos>']
-                tokens += len(words)
-                for word in words: 
-                    self.dictionary.add_word(word)  
-        
+                words = line.split() + ['<eos>'] # <eos>: end of sequence
+                tokens += len(words) # 929589
+                for word in words:
+                    self.dictionary.add_word(word) # 42067
+
         # Tokenize the file content
         ids = torch.LongTensor(tokens)
         token = 0
@@ -44,3 +44,9 @@ class Corpus(object):
         num_batches = ids.size(0) // batch_size
         ids = ids[:num_batches*batch_size]
         return ids.view(batch_size, -1)
+
+if __name__ == "__main__":
+    corpus = Corpus()
+    ids = corpus.get_data('/home/cc/Python/pytorch-tutorial/tutorials/02-intermediate/language_model/data/train.txt', 10)
+    print(f"ids size: {ids.shape}, ids frist five items: {ids[2][:20]}") # torch.Size([10, 92958])
+    print(corpus.dictionary.__len__()) # 10000

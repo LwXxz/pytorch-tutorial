@@ -3,13 +3,15 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 
+from model import NeuralNetwork
+
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters 
-input_size = 784
-hidden_size = 500
+input_dim = 1
+hidden_dim = 500
 num_classes = 10
 num_epochs = 5
 batch_size = 100
@@ -35,20 +37,20 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                           shuffle=False)
 
 # Fully connected neural network with one hidden layer
-class NeuralNet(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
-        super(NeuralNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size) 
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, num_classes)  
+# class NeuralNet(nn.Module):
+#     def __init__(self, input_size, hidden_size, num_classes):
+#         super(NeuralNet, self).__init__()
+#         self.fc1 = nn.Linear(input_size, hidden_size) 
+#         self.relu = nn.ReLU()
+#         self.fc2 = nn.Linear(hidden_size, num_classes)  
     
-    def forward(self, x):
-        out = self.fc1(x)
-        out = self.relu(out)
-        out = self.fc2(out)
-        return out
+#     def forward(self, x):
+#         out = self.fc1(x)
+#         out = self.relu(out)
+#         out = self.fc2(out)
+#         return out
 
-model = NeuralNet(input_size, hidden_size, num_classes).to(device)
+model = NeuralNetwork(input_dim, hidden_dim, num_classes).to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
@@ -59,7 +61,8 @@ total_step = len(train_loader)
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.reshape(-1, 28*28).to(device)
+        # print(images.shape) torch.Size([100, 1, 28, 28])
+        images = images.to(device)
         labels = labels.to(device)
         
         # Forward pass
@@ -81,7 +84,7 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)

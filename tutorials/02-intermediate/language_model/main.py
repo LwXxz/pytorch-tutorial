@@ -22,7 +22,7 @@ learning_rate = 0.002
 
 # Load "Penn Treebank" dataset
 corpus = Corpus()
-ids = corpus.get_data('data/train.txt', batch_size)
+ids = corpus.get_data('/home/cc/Python/pytorch-tutorial/tutorials/02-intermediate/language_model/data/train.txt', batch_size)
 vocab_size = len(corpus.dictionary)
 num_batches = ids.size(1) // seq_length
 

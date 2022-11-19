@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 
 # Hyper-parameters 
 input_size = 28 * 28    # 784
+hidden_size = 1000
 num_classes = 10
 num_epochs = 5
 batch_size = 100
@@ -31,8 +32,17 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
                                           shuffle=False)
 
 # Logistic regression model
+# model_complex = nn.Sequential(
+#     nn.Linear(input_size, hidden_size),
+#     nn.ReLU(),
+#     nn.Linear(hidden_size, hidden_size),
+#     nn.ReLU(),
+#     nn.Linear(hidden_size, num_classes)
+# )
+# simple model is better than complex
 model = nn.Linear(input_size, num_classes)
 
+print(model)
 # Loss and optimizer
 # nn.CrossEntropyLoss() computes softmax internally
 criterion = nn.CrossEntropyLoss()  
